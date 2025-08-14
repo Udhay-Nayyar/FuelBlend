@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Fuel Blending Model</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet" />
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);
+            color: white;
+            overflow-x: hidden;
+        }
+
+        .hero-video-section {
+            position: relative;
+            height: 100vh;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+        }
+
+        .hero-video-section video {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            z-index: -1;
+        }
+
+
+
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 0;
+        }
+
+        .hero-text {
+            z-index: 1;
+            padding: 0 20px;
+        }
+
+        .hero-text h1 {
+            font-size: 3.5rem;
+            font-weight: bold;
+            text-shadow: 0 0 10px rgba(0, 255, 255, 0.6);
+            color: #00ffbb;
+        }
+
+        .hero-text p {
+            font-size: 1.3rem;
+            max-width: 700px;
+            margin: 20px auto;
+        }
+
+        .section {
+            padding: 80px 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+            position: relative;
+            z-index: 2;
+        }
+
+        .section-title {
+            font-size: 2.8rem;
+            margin-bottom: 50px;
+            text-align: center;
+            color: #00ffbb;
+            text-shadow: 0 2px 6px rgba(0, 255, 187, 0.2);
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .card {
+            background: rgba(255, 255, 255, 0.08);
+            border-radius: 16px;
+            padding: 30px;
+            border: 1px solid rgba(0, 255, 187, 0.15);
+            box-shadow: 0 12px 25px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(10px);
+            transition: transform 0.4s ease, box-shadow 0.4s;
+        }
+
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 40px rgba(0, 255, 187, 0.3);
+        }
+
+        .card h3 {
+            font-size: 1.6rem;
+            color: #00ffbb;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            font-size: 1rem;
+            color: #e0e0e0;
+        }
+
+        .card i {
+            font-size: 2rem;
+            margin-right: 10px;
+            color: #00ffbb;
+        }
+
+        .cta-section {
+            text-align: center;
+            background: linear-gradient(to right, #00ffbb10, #00ffbb05);
+            padding: 80px 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .cta-section p {
+            font-size: 1.3rem;
+            color: #e0e0e0;
+        }
+
+        .cta-button {
+            display: inline-block;
+            margin-top: 25px;
+            padding: 16px 32px;
+            background-color: #00ffbb;
+            color: black;
+            font-weight: bold;
+            border-radius: 12px;
+            text-decoration: none;
+            font-size: 1.2rem;
+            transition: background-color 0.3s, transform 0.2s;
+        }
+
+        .cta-button:hover {
+            background-color: #00e6a8;
+            transform: scale(1.05);
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            background-color: rgba(0, 0, 0, 0.5);
+            font-size: 0.9rem;
+            color: #ccc;
+        }
+
+        .top-navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 30px;
+            z-index: 10;
+            backdrop-filter: blur(8px);
+            box-shadow: 0 2px 6px rgba(0, 255, 187, 0.2);
+        }
+
+        .logo {
+            font-size: 1.5rem;
+            color: #00ffbb;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .logo i {
+            font-size: 1.5rem;
+        }
+
+        .nav-links {
+            list-style: none;
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links li a {
+            color: #ffffff;
+            text-decoration: none;
+            font-size: 1rem;
+            transition: color 0.3s;
+        }
+
+        .nav-links li a:hover {
+            color: #00ffbb;
+        }
+
+        .dropdown {
+            position: relative;
+        }
+
+        .dropdown-menu {
+            position: absolute;
+            top: 100%;
+            left: 0;
+            background: #111;
+            display: none;
+            padding: 10px;
+            border: 1px solid #00ffbb44;
+            border-radius: 10px;
+            z-index: 100;
+        }
+
+        .dropdown:hover .dropdown-menu {
+            display: block;
+        }
+
+        .dropdown-menu li {
+            position: relative;
+            padding: 8px 12px;
+            color: #00ffbb;
+            cursor: pointer;
+        }
+
+        .properties-dropdown {
+            display: none;
+            position: absolute;
+            left: 100%;
+            top: 0;
+            background: #222;
+            border: 1px solid #00ffbb22;
+            padding: 10px;
+            border-radius: 10px;
+            width: 180px;
+        }
+
+        .component:hover .properties-dropdown {
+            display: block;
+        }
+
+        .properties-dropdown li {
+            padding: 4px 8px;
+            color: white;
+            font-size: 0.9rem;
+        }
+
+
+        #component-selector:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 20px rgba(0, 255, 200, 0.5);
+        }
+
+        #component-selector label:hover {
+            transform: scale(1.05);
+            color: #00ffc8;
+        }
+
+        #predictBtn:enabled:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 16px rgba(0, 255, 200, 0.6);
+        }
+    </style>
+</head>
+
+<body>
+
+
+    <!-- NAVBAR -->
+    <nav class="top-navbar">
+        <div class="logo">
+            <i class="fas fa-gas-pump"></i> FuelBlend
+        </div>
+        <ul class="nav-links">
+            <li><a href="#home">Home</a></li>
+            <li><a href="#about">About</a></li>
+            <li class="dropdown">
+                <a href="#get-started" class="dropdown-toggle">Model</a>
+                <ul class="dropdown-menu">
+                    <li class="component" data-component="Component 1">Component 1
+                        <ul class="properties-dropdown">
+                            <li>Property 1</li>
+                            <li>Property 2</li>
+                            <li>Property 3</li>
+                            <li>Property 4</li>
+                            <li>Property 5</li>
+                            <li>Property 6</li>
+                            <li>Property 7</li>
+                            <li>Property 8</li>
+                            <li>Property 9</li>
+                            <li>Property 10</li>
+                        </ul>
+                    </li>
+                    <!-- Repeat for 4 more components -->
+                    <li class="component" data-component="Component 2">Component 2
+                        <ul class="properties-dropdown"> <!-- Same properties structure --> </ul>
+                    </li>
+                    <!-- ... -->
+                </ul>
+            </li>
+
+            <li><a href="#contact">Contact</a></li>
+        </ul>
+    </nav>
+
+
+
+
+    <!-- HERO SECTION -->
+    <section class="hero-video-section" id="home">
+        <video autoplay muted loop playsinline>
+            <source src="public/video/fuel4.mp4" type="video/mp4" />
+            Your browser does not support the video tag.
+        </video>
+        <div class="hero-overlay"></div>
+        <div class="hero-text">
+            <h1>Fuel Blending Property Predictor</h1>
+            <p>Experience the future of fuel formulation powered by machine learning. Explore how AI simplifies complex
+                blending tasks and contributes to a greener future.</p>
+        </div>
+    </section>
+
+    <!-- CONTENT SECTIONS -->
+    <section class="section" id="about">
+        <h2 class="section-title">How It Works</h2>
+        <div class="cards">
+            <div class="card" data-aos="fade-up">
+                <h3><i class="fas fa-flask"></i>Input Blend Composition</h3>
+                <p>Enter the proportions of four different components in your fuel blend.</p>
+            </div>
+            <div class="card" data-aos="fade-up">
+                <h3><i class="fas fa-cogs"></i>Model Prediction</h3>
+                <p>Our trained ML model predicts fuel properties such as density, viscosity, and calorific value.</p>
+            </div>
+            <div class="card" data-aos="fade-up">
+                <h3><i class="fas fa-check-circle"></i>Accuracy Verified</h3>
+                <p>Trained on thousands of combinations and validated against real-world data with high accuracy.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">Why Fuel Blending Matters</h2>
+        <div class="cards">
+            <div class="card" data-aos="fade-up">
+                <h3><i class="fas fa-leaf"></i>Environmental Benefits</h3>
+                <p>Optimized fuel blends reduce emissions, promoting cleaner air and sustainability.</p>
+            </div>
+            <div class="card" data-aos="fade-up">
+                <h3><i class="fas fa-coins"></i>Economic Efficiency</h3>
+                <p>Use data to make cost-effective blending decisions while meeting performance targets.</p>
+            </div>
+            <div class="card" data-aos="fade-up">
+                <h3><i class="fas fa-bolt"></i>Energy Innovation</h3>
+                <p>Leverage AI to innovate and modernize fuel production techniques.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title">Why Our Model?</h2>
+        <div class="cards">
+            <div class="card" data-aos="fade-up">
+                <h3><i class="fas fa-stopwatch"></i>Fast & Accurate</h3>
+                <p>Get reliable predictions in seconds with high precision.</p>
+            </div>
+            <div class="card" data-aos="fade-up">
+                <h3><i class="fas fa-book"></i>Research Backed</h3>
+                <p>Built using scientific data, domain expertise, and advanced regression techniques.</p>
+            </div>
+            <div class="card" data-aos="fade-up">
+                <h3><i class="fas fa-user-friends"></i>User Friendly</h3>
+                <p>Designed for researchers, students, and industry professionals alike.</p>
+            </div>
+        </div>
+    </section>
+
+    <section class="section">
+        <h2 class="section-title" data-aos="fade-up">What People Say</h2>
+        <div class="cards" data-aos="fade-up" style="text-align: center;">
+            <div class="card" style="max-width: 700px; margin: auto;">
+                <p style="font-style: italic;">"A revolutionary tool for researchers and fuel engineers. The predictions
+                    are fast and surprisingly accurate."</p>
+                <h4 style="margin-top: 15px;">— Dr. Anjali Mehta, Energy Researcher</h4>
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section" id="get-started">
+        <h2 class="section-title">Get Started</h2>
+        <p>Try our tool and revolutionize your fuel formulation process today.</p>
+
+        <div id="component-selector"
+            style="margin-top: 40px; max-width: 500px; margin-left: auto; margin-right: auto; background-color: rgba(255,255,255,0.05); padding: 30px; border-radius: 12px; box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);">
+            <h3 style="text-align: center; font-size: 1.5rem; margin-bottom: 20px; color: #fff; font-weight: bold;">
+                Select Components to Blend</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; color: #fff;">
+                <label><input type="checkbox" name="component" value="1"> Component 1</label>
+                <label><input type="checkbox" name="component" value="2"> Component 2</label>
+                <label><input type="checkbox" name="component" value="3"> Component 3</label>
+                <label><input type="checkbox" name="component" value="4"> Component 4</label>
+                <label><input type="checkbox" name="component" value="5"> Component 5</label>
+            </div>
+
+            <button id="predictBtn" disabled
+                style="margin-top: 30px; display: block; width: 100%; padding: 12px; font-size: 1.2rem; background: #00ffc8; color: #000; font-weight: bold; border: none; border-radius: 8px; cursor: pointer; transition: background 0.3s ease;"
+                class="cta-button">
+                Predict
+            </button>
+        </div>
+    </section>
+
+
+    <footer>
+        &copy; 2025 Fuel ML Project | All rights reserved
+    </footer>
+
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script>AOS.init();</script>
+    <script>
+        const checkboxes = document.querySelectorAll('input[name="component"]');
+        const predictBtn = document.getElementById('predictBtn');
+
+        checkboxes.forEach(cb => {
+            cb.addEventListener('change', () => {
+                const selected = [...checkboxes].filter(cb => cb.checked).length;
+                predictBtn.disabled = selected < 2;
+            });
+        });
+
+        predictBtn.addEventListener('click', () => {
+            const selectedComponents = [...checkboxes].filter(cb => cb.checked).map(cb => cb.value);
+            localStorage.setItem('selectedComponents', JSON.stringify(selectedComponents));
+            window.location.href = "composition.html";
+        });
+    </script>
+
+</body>
+
+</html>
