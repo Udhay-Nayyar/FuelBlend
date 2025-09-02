@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediction Results</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body { background: linear-gradient(135deg, #2c3e50, #34495e); min-height: 100vh; font-family: 'Segoe UI', sans-serif; color: white; padding: 20px; }
+        .results-container { max-width: 1200px; margin: 0 auto; }
+        .header-section { text-align: center; margin-bottom: 2rem; }
+        .main-title { font-size: 3rem; font-weight: 300; color: #1abc9c; }
+        .composition-summary { background: rgba(52, 73, 94, 0.9); border-radius: 15px; padding: 1.5rem; margin-bottom: 2rem; }
+        .component-chip { display: inline-block; background: #16a085; color: white; padding: 0.5rem 1rem; border-radius: 25px; margin: 0.25rem; font-weight: 600; }
+        .property-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+        .property-item { background: rgba(255, 255, 255, 0.05); border-radius: 12px; padding: 1.5rem; border-left: 4px solid #1abc9c; transition: all 0.3s ease; animation: fadeInUp 0.5s ease-out forwards; opacity: 0; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .property-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .property-name { font-size: 1.1rem; font-weight: 600; }
+        .property-model { font-size: 0.85rem; background: rgba(0,0,0,0.2); padding: 3px 8px; border-radius: 6px; }
+        .property-value { font-size: 2.2rem; font-weight: 700; color: #1abc9c; font-family: 'Courier New', monospace; }
+        .property-score { font-size: 0.9rem; color: rgba(255,255,255,0.7); margin-top: 0.5rem; }
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
+        .spinner { border: 8px solid rgba(255,255,255,0.2); border-left-color: #1abc9c; border-radius: 50%; width: 80px; height: 80px; animation: spin 1s linear infinite; }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .action-buttons { text-align: center; margin-top: 3rem; }
+        .action-btn { background: #1abc9c; color: #2c3e50; border: none; border-radius: 50px; padding: 12px 24px; font-size: 1rem; font-weight: 600; cursor: pointer; transition: all 0.3s ease; text-decoration: none; }
+        .action-btn:hover { transform: translateY(-3px); box-shadow: 0 4px 15px rgba(26, 188, 156, 0.3); }
+    </style>
+</head>
+<body>
+    <div id="loader" class="loading-overlay">
+        <div class="spinner"></div>
+        <h3 style="margin-top: 1rem;">Running ML Predictions...</h3>
+    </div>
+    
+    <div class="results-container" style="display: none;">
+        <div class="header-section">
+            <h1 class="main-title"><i class="fas fa-chart-line"></i> Prediction Results</h1>
+        </div>
+        <div class="composition-summary">
+            <h3 style="color: #1abc9c; margin-bottom: 1rem;"><i class="fas fa-flask"></i> Blend Composition</h3>
+            <div id="componentSummary"></div>
+        </div>
+        <div class="property-grid" id="predictionsGrid"></div>
+        <div class="action-buttons">
+            <a href="index.html" class="action-btn">
+                <i class="fas fa-redo-alt"></i> Start a New Blend
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function () {
+            const componentCompositions = JSON.parse(localStorage.getItem('componentCompositions')) || {};
+            const loader = document.getElementById('loader');
+            const resultsContainer = document.querySelector('.results-container');
+            const summaryDiv = document.getElementById('componentSummary');
+            const predictionsGrid = document.getElementById('predictionsGrid');
+
+            if (Object.keys(componentCompositions).length === 0) {
+                summaryDiv.innerHTML = '<p>No composition data found.</p>';
+                loader.style.display = 'none';
+                resultsContainer.style.display = 'block';
+                return;
+            }
+
+            // Display a summary of the user's choices
+            Object.keys(componentCompositions).forEach(c => {
+                const chip = document.createElement('span');
+                chip.className = 'component-chip';
+                chip.innerHTML = `Component ${c}: <strong>${(componentCompositions[c] * 100).toFixed(1)}%</strong>`;
+                summaryDiv.appendChild(chip);
+            });
+
+            try {
+                // Call the backend API for predictions
+                const response = await fetch('http://127.0.0.1:5000/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ compositions: componentCompositions })
+                });
+
+                if (!response.ok) throw new Error('API call failed');
+                const predictions = await response.json();
+
+                // Display the new, detailed prediction cards
+                Object.keys(predictions).forEach((key, index) => {
+                    const data = predictions[key];
+                    const item = document.createElement('div');
+                    item.className = 'property-item';
+                    item.style.animationDelay = `${index * 0.1}s`;
+                    item.innerHTML = `
+                        <div class="property-header">
+                            <span class="property-name">${key.replace('Blend', '')}</span>
+                            <span class="property-model">${data.model}</span>
+                        </div>
+                        <div class="property-value">${data.prediction.toFixed(4)}</div>
+                        <div class="property-score">
+                            Accuracy (R² Score): <strong>${data.r2_score.toFixed(4)}</strong>
+                        </div>
+                    `;
+                    predictionsGrid.appendChild(item);
+                });
+
+            } catch (error) {
+                console.error('Error calling prediction API:', error);
+                predictionsGrid.innerHTML = `<p style="color:red; text-align:center;"><strong>Connection Error:</strong> Could not get predictions. Please ensure the Python backend server is running.</p>`;
+            } finally {
+                loader.style.display = 'none';
+                resultsContainer.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
+

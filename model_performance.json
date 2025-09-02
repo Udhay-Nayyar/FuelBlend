@@ -1,0 +1,42 @@
+{
+    "BlendProperty1": {
+        "model": "SVR",
+        "r2_score": 0.8723614883927223
+    },
+    "BlendProperty2": {
+        "model": "SVR",
+        "r2_score": 0.8836981826766378
+    },
+    "BlendProperty3": {
+        "model": "RandomForestRegressor",
+        "r2_score": 0.8897027246643032
+    },
+    "BlendProperty4": {
+        "model": "LinearRegression",
+        "r2_score": 0.8809367827939725
+    },
+    "BlendProperty5": {
+        "model": "RandomForestRegressor",
+        "r2_score": 0.9567571930615674
+    },
+    "BlendProperty6": {
+        "model": "SVR",
+        "r2_score": 0.8573043643727131
+    },
+    "BlendProperty7": {
+        "model": "RandomForestRegressor",
+        "r2_score": 0.8873864847750151
+    },
+    "BlendProperty8": {
+        "model": "RandomForestRegressor",
+        "r2_score": 0.813436708160277
+    },
+    "BlendProperty9": {
+        "model": "RandomForestRegressor",
+        "r2_score": 0.8275263377714086
+    },
+    "BlendProperty10": {
+        "model": "SVR",
+        "r2_score": 0.8863348830915485
+    }
+}
