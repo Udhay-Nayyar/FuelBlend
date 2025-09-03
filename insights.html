@@ -1,0 +1,455 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Insights - Fuel Predictor</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(184, 134, 11, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(205, 127, 50, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, #2f2f2f 0%, #1a1a1a 50%, #8b4513 100%);
+            min-height: 100vh;
+            font-family: 'Cinzel', serif;
+            color: #f5f5dc;
+            overflow-x: hidden;
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Industrial Machinery Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 25% 25%, #b8860b 2px, transparent 2px),
+                radial-gradient(circle at 75% 75%, #cd7f32 1px, transparent 1px),
+                repeating-linear-gradient(45deg, transparent, transparent 10px, rgba(184, 134, 11, 0.1) 10px, rgba(184, 134, 11, 0.1) 20px),
+                repeating-linear-gradient(-45deg, transparent, transparent 15px, rgba(205, 127, 50, 0.1) 15px, rgba(205, 127, 50, 0.1) 30px);
+            background-size: 120px 120px, 60px 60px, 40px 40px, 60px 60px;
+            opacity: 0.15;
+            z-index: -2;
+            animation: machineryRotation 60s linear infinite;
+        }
+
+        @keyframes machineryRotation {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+
+            100% {
+                transform: rotate(360deg) scale(1.03);
+            }
+        }
+
+        .insights-container {
+            display: flex;
+            height: calc(100vh - 40px);
+            gap: 30px;
+            position: relative;
+        }
+
+        .component-card-container {
+            flex: 0 0 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .component-card {
+            width: 350px;
+            height: 450px;
+            background: 
+                linear-gradient(135deg, rgba(47, 47, 47, 0.9), rgba(139, 69, 19, 0.8)),
+                radial-gradient(circle at center, rgba(184, 134, 11, 0.1), transparent);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(15px);
+            border: 3px solid #b8860b;
+            box-shadow: 
+                0 20px 50px rgba(184, 134, 11, 0.4),
+                inset 0 3px 0 rgba(218, 165, 32, 0.3),
+                inset 0 -3px 0 rgba(139, 69, 19, 0.5);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            animation: slideInFromRight 1s ease-out;
+        }
+
+        .properties-panel {
+            flex: 1;
+            background: 
+                linear-gradient(135deg, rgba(47, 47, 47, 0.95), rgba(112, 128, 144, 0.9)),
+                radial-gradient(circle at center, rgba(184, 134, 11, 0.1), transparent);
+            border-radius: 15px;
+            padding: 2rem;
+            backdrop-filter: blur(15px);
+            border: 3px solid #b8860b;
+            box-shadow: 
+                0 20px 50px rgba(184, 134, 11, 0.4),
+                inset 0 3px 0 rgba(218, 165, 32, 0.2);
+            animation: slideInFromLeft 1s ease-out;
+            overflow-y: auto;
+        }
+
+        @keyframes slideInFromRight {
+            0% {
+                transform: translateX(100%) scale(0.8);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            0% {
+                transform: translateX(-100%) scale(0.8);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .component-icon {
+            font-size: 4.5rem;
+            color: #daa520;
+            margin-bottom: 1.5rem;
+            text-shadow: 
+                3px 3px 6px rgba(0, 0, 0, 0.8),
+                0 0 20px #b8860b;
+            filter: drop-shadow(0 0 15px #cd7f32);
+            animation: brassGlow 4s infinite;
+        }
+
+        @keyframes brassGlow {
+            0% {
+                transform: scale(1);
+                text-shadow: 
+                    3px 3px 6px rgba(0, 0, 0, 0.8),
+                    0 0 20px #b8860b;
+                filter: drop-shadow(0 0 15px #cd7f32);
+            }
+
+            50% {
+                transform: scale(1.08);
+                text-shadow: 
+                    3px 3px 8px rgba(0, 0, 0, 0.8),
+                    0 0 30px #b8860b,
+                    0 0 40px #cd7f32;
+                filter: drop-shadow(0 0 25px #cd7f32);
+            }
+
+            100% {
+                transform: scale(1);
+                text-shadow: 
+                    3px 3px 6px rgba(0, 0, 0, 0.8),
+                    0 0 20px #b8860b;
+                filter: drop-shadow(0 0 15px #cd7f32);
+            }
+        }
+
+        .component-title {
+            font-size: 1.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            color: #f5f5dc;
+            font-family: 'Cinzel', serif;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        .component-value {
+            font-size: 3.2rem;
+            font-weight: 700;
+            color: #cd7f32;
+            margin: 1rem 0;
+            text-shadow: 
+                3px 3px 6px rgba(0, 0, 0, 0.8),
+                0 0 20px #b8860b;
+            font-family: 'Cinzel', serif;
+        }
+
+        .properties-title {
+            font-size: 2.2rem;
+            font-weight: 700;
+            margin-bottom: 2rem;
+            color: #daa520;
+            text-align: center;
+            border-bottom: 3px solid rgba(184, 134, 11, 0.4);
+            padding-bottom: 1rem;
+            font-family: 'Cinzel', serif;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 15px #b8860b;
+        }
+
+        .property-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #1abc9c;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .property-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .property-item {
+            background: 
+                linear-gradient(135deg, rgba(184, 134, 11, 0.15), rgba(205, 127, 50, 0.1)),
+                rgba(47, 47, 47, 0.3);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #daa520;
+            border: 2px solid rgba(184, 134, 11, 0.4);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+            box-shadow: 
+                0 4px 12px rgba(184, 134, 11, 0.2),
+                inset 0 1px 0 rgba(218, 165, 32, 0.2);
+        }
+
+        .property-item:hover {
+            background: 
+                linear-gradient(135deg, rgba(184, 134, 11, 0.25), rgba(205, 127, 50, 0.2)),
+                rgba(47, 47, 47, 0.4);
+            transform: translateX(12px);
+            border-color: #cd7f32;
+            box-shadow: 
+                0 8px 20px rgba(184, 134, 11, 0.4),
+                inset 0 2px 0 rgba(218, 165, 32, 0.3);
+        }
+
+        .property-name {
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: #f5f5dc;
+            margin-bottom: 0.5rem;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-family: 'Cinzel', serif;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .property-value {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #cd7f32;
+            font-family: 'Cinzel', serif;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 10px #b8860b;
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 30px;
+            left: 30px;
+            background: linear-gradient(135deg, #b8860b, #8b4513);
+            color: #f5f5dc;
+            border: 2px solid #daa520;
+            border-radius: 40px;
+            padding: 14px 28px;
+            font-size: 1rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 6px 18px rgba(184, 134, 11, 0.4),
+                inset 0 2px 0 rgba(218, 165, 32, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Cinzel', serif;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, #daa520, #cd7f32);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 8px 22px rgba(184, 134, 11, 0.6),
+                inset 0 3px 0 rgba(218, 165, 32, 0.4);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(192, 192, 192, .3);
+            border-radius: 50%;
+            border-top-color: var(--brass-gold);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button class="back-btn" onclick="goBack()">
+        <i class="fas fa-arrow-left"></i>
+        Back to Composition
+    </button>
+
+    <div class="insights-container">
+        <!-- Component Card (Right Side) -->
+        <div class="component-card-container">
+            <div class="component-card">
+                <div class="component-icon">
+                    <i id="componentIcon" class="fas fa-vial"></i>
+                </div>
+
+                <h2 class="component-title" id="componentTitle">Component A</h2>
+
+                <div class="component-value" id="componentValue">0.20</div>
+
+                <div style="color: rgba(255,255,255,0.7); font-size: 1rem;">
+                    Current Composition
+                </div>
+
+                <div style="margin-top: 2rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.8);">
+                        <i class="fas fa-info-circle"></i>
+                        <span id="componentStatus">Moderate concentration</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Properties Panel (Left Side) -->
+        <div class="properties-panel">
+            <h2 class="properties-title">
+                <i class="fas fa-chart-bar"></i>
+                <span id="propertiesTitle">Component Properties Analysis</span>
+            </h2>
+            <div id="propertiesList">
+                <!-- Properties will be dynamically loaded here -->
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const component = urlParams.get('component') || '1';
+        const value = parseFloat(urlParams.get('value')) || 0.2;
+
+        const componentIcons = {
+            '1': 'fas fa-oil-can',
+            '2': 'fas fa-flask',
+            '3': 'fas fa-atom',
+            '4': 'fas fa-fire',
+            '5': 'fas fa-leaf'
+        };
+
+        function initializePage() {
+            document.getElementById('componentIcon').className = componentIcons[component] || 'fas fa-vial';
+            document.getElementById('componentTitle').textContent = `Component ${component}`;
+            document.getElementById('componentValue').textContent = `${(value * 100).toFixed(1)}%`;
+
+            const statusElement = document.getElementById('componentStatus');
+            if (value < 0.1) statusElement.textContent = 'Low concentration';
+            else if (value < 0.3) statusElement.textContent = 'Moderate concentration';
+            else if (value < 0.6) statusElement.textContent = 'High concentration';
+            else statusElement.textContent = 'Very high concentration';
+
+            // Update title to show composition-dependent analysis
+            document.getElementById('propertiesTitle').textContent =
+                `Properties at ${(value * 100).toFixed(1)}% Composition`;
+
+            loadProperties();
+        }
+
+        async function loadProperties() {
+            const propertiesList = document.getElementById('propertiesList');
+            propertiesList.innerHTML = '<div class="text-center"><div class="loading-spinner"></div><p>Loading properties...</p></div>';
+
+            try {
+                // Use properties endpoint
+                const url = `http://127.0.0.1:5000/properties?component=${component}&composition=${value}`;
+                console.log('Calling:', url);
+
+                const response = await fetch(url);
+                console.log('Response status:', response.status);
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`API error ${response.status}: ${errorText}`);
+                }
+
+                const data = await response.json();
+                console.log('Received data:', data);
+
+                propertiesList.innerHTML = '';
+
+                Object.keys(data).forEach((key, index) => {
+                    if (key !== 'error') {
+                        const propertyItem = document.createElement('div');
+                        propertyItem.className = 'property-item';
+                        propertyItem.innerHTML = `
+                            <div class="property-name">
+                                <i class="fas fa-cog"></i> ${key}
+                            </div>
+                            <div class="property-value">${parseFloat(data[key]).toFixed(6)}</div>
+                        `;
+                        propertiesList.appendChild(propertyItem);
+                    }
+                });
+
+            } catch (error) {
+                console.error('Error:', error);
+                propertiesList.innerHTML = `<div style="color: red;">ERROR: ${error.message}</div>`;
+            }
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+
+</html>
