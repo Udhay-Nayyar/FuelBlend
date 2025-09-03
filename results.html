@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediction Results</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            --brass-gold: #b8860b;
+            --copper-orange: #cd7f32;
+            --bronze-brown: #8b4513;
+            --steam-white: #f5f5dc;
+            --iron-gray: #696969;
+            --coal-black: #2f2f2f;
+            --rust-red: #b22222;
+            --gear-silver: #c0c0c0;
+            --boiler-green: #556b2f;
+            --piston-blue: #4682b4;
+            --victorian-gold: #daa520;
+            --machinery-steel: #708090;
+        }
+        
+        body { 
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(184, 134, 11, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(205, 127, 50, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, var(--coal-black) 0%, #1a1a1a 50%, var(--bronze-brown) 100%); 
+            min-height: 100vh; 
+            font-family: 'Cinzel', serif; 
+            color: var(--steam-white); 
+            padding: 20px;
+            position: relative;
+        }
+
+        /* Industrial Machinery Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, var(--brass-gold) 2px, transparent 2px),
+                radial-gradient(circle at 80% 70%, var(--copper-orange) 1px, transparent 1px),
+                repeating-linear-gradient(0deg, transparent, transparent 15px, rgba(184, 134, 11, 0.1) 15px, rgba(184, 134, 11, 0.1) 30px),
+                repeating-linear-gradient(90deg, transparent, transparent 20px, rgba(205, 127, 50, 0.1) 20px, rgba(205, 127, 50, 0.1) 40px);
+            background-size: 100px 100px, 50px 50px, 60px 60px, 80px 80px;
+            opacity: 0.15;
+            z-index: -2;
+            animation: machineryHum 45s linear infinite;
+        }
+
+        @keyframes machineryHum {
+            0% { transform: rotate(0deg) scale(1); }
+            100% { transform: rotate(360deg) scale(1.02); }
+        }
+        .results-container { max-width: 1200px; margin: 0 auto; }
+        .header-section { text-align: center; margin-bottom: 2rem; }
+        .main-title { 
+            font-family: 'Cinzel', serif;
+            font-size: 3.2rem; 
+            font-weight: 700; 
+            background: linear-gradient(135deg, var(--victorian-gold), var(--brass-gold), var(--copper-orange), var(--steam-white));
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: brassShimmer 8s ease-in-out infinite;
+            text-shadow: 3px 3px 6px rgba(0, 0, 0, 0.8);
+        }
+
+        @keyframes brassShimmer {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 25% 25%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 75% 75%; }
+        }
+        .composition-summary { 
+            background: 
+                linear-gradient(135deg, rgba(47, 47, 47, 0.9), rgba(139, 69, 19, 0.8)),
+                radial-gradient(circle at center, rgba(184, 134, 11, 0.1), transparent); 
+            border-radius: 15px; 
+            padding: 1.5rem; 
+            margin-bottom: 2rem;
+            border: 3px solid var(--brass-gold);
+            box-shadow: 
+                0 0 30px rgba(184, 134, 11, 0.4), 
+                inset 0 3px 0 rgba(218, 165, 32, 0.3),
+                inset 0 -3px 0 rgba(139, 69, 19, 0.5);
+        }
+        .component-chip { 
+            display: inline-block; 
+            background: linear-gradient(135deg, var(--brass-gold), var(--copper-orange)); 
+            color: var(--coal-black); 
+            padding: 0.6rem 1.2rem; 
+            border-radius: 20px; 
+            margin: 0.25rem; 
+            font-weight: 700;
+            border: 2px solid var(--victorian-gold);
+            box-shadow: 
+                0 4px 12px rgba(184, 134, 11, 0.4),
+                inset 0 2px 0 rgba(218, 165, 32, 0.3);
+            font-family: 'Cinzel', serif;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        .property-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 1.5rem; }
+        .property-item { 
+            background: 
+                linear-gradient(135deg, rgba(47, 47, 47, 0.9), rgba(112, 128, 144, 0.8)),
+                radial-gradient(circle at center, rgba(184, 134, 11, 0.1), transparent); 
+            border-radius: 12px; 
+            padding: 1.5rem; 
+            border: 2px solid var(--brass-gold);
+            box-shadow: 
+                0 8px 20px rgba(184, 134, 11, 0.3), 
+                inset 0 2px 0 rgba(218, 165, 32, 0.2),
+                inset 0 -2px 0 rgba(139, 69, 19, 0.3);
+            transition: all 0.3s ease; 
+            animation: fadeInUp 0.5s ease-out forwards; 
+            opacity: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .property-item::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            background: linear-gradient(45deg, var(--victorian-gold), var(--brass-gold), var(--copper-orange), var(--gear-silver));
+            background-size: 400% 400%;
+            z-index: -1;
+            border-radius: 12px;
+            animation: brassGlow 8s ease-in-out infinite;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .property-item:hover::before {
+            opacity: 0.7;
+        }
+
+        .property-item:hover {
+            transform: translateY(-6px) scale(1.02);
+            box-shadow: 
+                0 15px 35px rgba(184, 134, 11, 0.5),
+                inset 0 3px 0 rgba(218, 165, 32, 0.4);
+            border-color: var(--copper-orange);
+        }
+
+        @keyframes brassGlow {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 50% 0%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 50% 100%; }
+        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .property-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .property-name { 
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem; 
+            font-weight: 700;
+            color: var(--victorian-gold);
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 10px var(--brass-gold);
+        }
+        .property-model { 
+            font-size: 0.85rem; 
+            background: rgba(47, 47, 47, 0.8); 
+            padding: 5px 12px; 
+            border-radius: 6px;
+            border: 1px solid var(--brass-gold);
+            color: var(--gear-silver);
+            font-family: 'Libre Baskerville', serif;
+            box-shadow: inset 0 1px 0 rgba(218, 165, 32, 0.2);
+        }
+        .property-value { 
+            font-size: 2.2rem; 
+            font-weight: 700; 
+            color: var(--copper-orange); 
+            font-family: 'Cinzel', serif;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 15px var(--brass-gold);
+        }
+        .property-score { 
+            font-size: 0.9rem; 
+            color: var(--gear-silver); 
+            margin-top: 0.5rem; 
+            font-family: 'Libre Baskerville', serif;
+        }
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
+        .spinner { 
+            border: 8px solid rgba(192, 192, 192, 0.2); 
+            border-left-color: var(--brass-gold); 
+            border-radius: 50%; 
+            width: 80px; 
+            height: 80px; 
+            animation: spin 1s linear infinite; 
+        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .action-buttons { text-align: center; margin-top: 3rem; }
+        .action-btn { 
+            background: linear-gradient(135deg, var(--brass-gold), var(--copper-orange)); 
+            color: var(--coal-black); 
+            border: 3px solid var(--victorian-gold); 
+            border-radius: 40px; 
+            padding: 14px 28px; 
+            font-size: 1rem; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 
+                0 6px 20px rgba(184, 134, 11, 0.4),
+                inset 0 2px 0 rgba(218, 165, 32, 0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        .action-btn:hover { 
+            transform: translateY(-3px) scale(1.05); 
+            box-shadow: 
+                0 8px 25px rgba(184, 134, 11, 0.6),
+                inset 0 3px 0 rgba(218, 165, 32, 0.4),
+                0 0 30px rgba(205, 127, 50, 0.4); 
+        }
+    </style>
+</head>
+<body>
+    <div id="loader" class="loading-overlay">
+        <div class="spinner"></div>
+        <h3 style="margin-top: 1rem;">Running ML Predictions...</h3>
+    </div>
+    
+    <div class="results-container" style="display: none;">
+        <div class="header-section">
+            <h1 class="main-title"><i class="fas fa-chart-line"></i> Prediction Results</h1>
+        </div>
+        <div class="composition-summary">
+            <h3 style="color: var(--victorian-gold); margin-bottom: 1rem; font-family: 'Cinzel', serif; font-weight: 700;"><i class="fas fa-flask"></i> Industrial Blend Composition</h3>
+            <div id="componentSummary"></div>
+        </div>
+        <div class="property-grid" id="predictionsGrid"></div>
+        <div class="action-buttons">
+            <a href="index.html" class="action-btn">
+                <i class="fas fa-redo-alt"></i> Start a New Blend
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function () {
+            const componentCompositions = JSON.parse(localStorage.getItem('componentCompositions')) || {};
+            const loader = document.getElementById('loader');
+            const resultsContainer = document.querySelector('.results-container');
+            const summaryDiv = document.getElementById('componentSummary');
+            const predictionsGrid = document.getElementById('predictionsGrid');
+
+            if (Object.keys(componentCompositions).length === 0) {
+                summaryDiv.innerHTML = '<p>No composition data found.</p>';
+                loader.style.display = 'none';
+                resultsContainer.style.display = 'block';
+                return;
+            }
+
+            // Display a summary of the user's choices
+            Object.keys(componentCompositions).forEach(c => {
+                const chip = document.createElement('span');
+                chip.className = 'component-chip';
+                chip.innerHTML = `Component ${c}: <strong>${(componentCompositions[c] * 100).toFixed(1)}%</strong>`;
+                summaryDiv.appendChild(chip);
+            });
+
+            try {
+                // Call the backend API for predictions
+                const response = await fetch('http://127.0.0.1:5000/predict', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ compositions: componentCompositions })
+                });
+
+                if (!response.ok) throw new Error('API call failed');
+                const predictions = await response.json();
+
+                // Display the new, detailed prediction cards
+                Object.keys(predictions).forEach((key, index) => {
+                    const data = predictions[key];
+                    const item = document.createElement('div');
+                    item.className = 'property-item';
+                    item.style.animationDelay = `${index * 0.1}s`;
+                    item.innerHTML = `
+                        <div class="property-header">
+                            <span class="property-name">${key.replace('Blend', '')}</span>
+                            <span class="property-model">${data.model}</span>
+                        </div>
+                        <div class="property-value">${data.prediction.toFixed(4)}</div>
+                        <div class="property-score">
+                            Accuracy (R² Score): <strong>${data.r2_score.toFixed(4)}</strong>
+                        </div>
+                    `;
+                    predictionsGrid.appendChild(item);
+                });
+
+            } catch (error) {
+                console.error('Error calling prediction API:', error);
+                predictionsGrid.innerHTML = `<p style="color:red; text-align:center;"><strong>Connection Error:</strong> Could not get predictions. Please ensure the Python backend server is running.</p>`;
+            } finally {
+                loader.style.display = 'none';
+                resultsContainer.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
+
