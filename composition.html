@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Define Blend Composition</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <style>
+        :root {
+            --brass-gold: #b8860b;
+            --copper-orange: #cd7f32;
+            --bronze-brown: #8b4513;
+            --steam-white: #f5f5dc;
+            --iron-gray: #696969;
+            --coal-black: #2f2f2f;
+            --rust-red: #b22222;
+            --gear-silver: #c0c0c0;
+            --boiler-green: #556b2f;
+            --piston-blue: #4682b4;
+            --victorian-gold: #daa520;
+            --machinery-steel: #708090;
+        }
+        body { 
+            font-family: 'Cinzel', serif; 
+            background: 
+                radial-gradient(circle at 30% 20%, rgba(184, 134, 11, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 70% 80%, rgba(205, 127, 50, 0.1) 0%, transparent 50%),
+                linear-gradient(135deg, var(--coal-black) 0%, #1a1a1a 50%, var(--bronze-brown) 100%); 
+            color: var(--steam-white); 
+            min-height: 100vh; 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            justify-content: flex-start; 
+            padding: 20px; 
+            overflow-x: hidden;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        /* Industrial Gear Pattern Background */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(184, 134, 11, 0.1) 8px, rgba(184, 134, 11, 0.1) 16px),
+                repeating-linear-gradient(-45deg, transparent, transparent 12px, rgba(205, 127, 50, 0.1) 12px, rgba(205, 127, 50, 0.1) 24px),
+                radial-gradient(circle at 25% 25%, var(--brass-gold) 1px, transparent 1px);
+            background-size: 50px 50px, 75px 75px, 100px 100px;
+            opacity: 0.15;
+            z-index: -2;
+            animation: industrialPattern 40s linear infinite;
+        }
+
+        @keyframes industrialPattern {
+            0% { transform: translate(0, 0) rotate(0deg); }
+            100% { transform: translate(25px, 25px) rotate(180deg); }
+        }
+        .top-navbar { 
+            width: 100%; 
+            background: linear-gradient(135deg, rgba(47, 47, 47, 0.95), rgba(139, 69, 19, 0.9)); 
+            backdrop-filter: blur(15px); 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            padding: 15px 40px; 
+            border-bottom: 3px solid var(--brass-gold);
+            box-shadow: 
+                0 4px 20px rgba(184, 134, 11, 0.4), 
+                inset 0 2px 0 rgba(218, 165, 32, 0.3); 
+            position: fixed; 
+            top: 0; 
+            left: 0; 
+            z-index: 100;
+        }
+        
+        .navbar-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            width: 100%;
+            max-width: 1200px;
+        }
+        .logo { 
+            font-family: 'Cinzel', serif;
+            font-size: 1.8rem; 
+            color: var(--victorian-gold); 
+            font-weight: 700;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 10px var(--brass-gold);
+            animation: brassPulse 5s ease-in-out infinite;
+        }
+
+        @keyframes brassPulse {
+            0%, 100% { 
+                text-shadow: 
+                    2px 2px 4px rgba(0, 0, 0, 0.8),
+                    0 0 10px var(--brass-gold);
+                transform: scale(1);
+            }
+            50% { 
+                text-shadow: 
+                    2px 2px 6px rgba(0, 0, 0, 0.8),
+                    0 0 15px var(--brass-gold),
+                    0 0 25px var(--copper-orange);
+                transform: scale(1.02);
+            }
+        }
+
+        .back-link {
+            color: var(--gear-silver);
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            font-weight: 600;
+            font-size: 0.9rem;
+            padding: 10px 20px;
+            border-radius: 8px;
+            border: 2px solid var(--brass-gold);
+            transition: all 0.3s;
+            white-space: nowrap;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(47, 47, 47, 0.3);
+        }
+
+        .back-link:hover {
+            background: linear-gradient(135deg, var(--brass-gold), var(--copper-orange));
+            color: var(--coal-black);
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(184, 134, 11, 0.4);
+            border-color: var(--victorian-gold);
+        }
+        .main-container { 
+            display: flex; 
+            flex-direction: column; 
+            align-items: center; 
+            width: 100%; 
+            max-width: 500px; 
+            margin-top: 80px; 
+            min-height: calc(100vh - 160px);
+            justify-content: center;
+        }
+        .cards-container { 
+            position: relative; 
+            width: 100%; 
+            height: 420px; 
+            perspective: 1200px; 
+            cursor: grab; 
+            margin-bottom: 20px;
+        }
+        .cards-container:active { cursor: grabbing; }
+        .composition-card { 
+            position: absolute; 
+            top: 0; 
+            left: 0; 
+            width: 100%; 
+            height: 100%; 
+            background: 
+                linear-gradient(135deg, rgba(47, 47, 47, 0.9), rgba(139, 69, 19, 0.8)),
+                radial-gradient(circle at center, rgba(184, 134, 11, 0.1), transparent); 
+            border-radius: 15px; 
+            padding: 2.5rem; 
+            backdrop-filter: blur(15px); 
+            border: 3px solid var(--brass-gold); 
+            box-shadow: 
+                0 0 30px rgba(184, 134, 11, 0.4), 
+                inset 0 3px 0 rgba(218, 165, 32, 0.3),
+                inset 0 -3px 0 rgba(139, 69, 19, 0.5); 
+            text-align: center; 
+            display: flex; 
+            flex-direction: column; 
+            justify-content: center; 
+            backface-visibility: hidden; 
+            transition: all 0.6s cubic-bezier(0.25, 1, 0.5, 1); 
+        }
+        .composition-card.prev:hover { transform: translateX(-110%) translateZ(-200px) rotateY(35deg) scale(0.85); }
+        .composition-card.next:hover { transform: translateX(110%) translateZ(-200px) rotateY(-35deg) scale(0.85); }
+        .composition-card.active { transform: translateZ(0) rotateY(0deg) scale(1); z-index: 10; opacity: 1; }
+        .composition-card.prev { transform: translateX(-110%) translateZ(-200px) rotateY(35deg) scale(0.8); z-index: 5; opacity: 0.5; }
+        .composition-card.next { transform: translateX(110%) translateZ(-200px) rotateY(-35deg) scale(0.8); z-index: 5; opacity: 0.5; }
+        .composition-card.hide { opacity: 0; transform: scale(0.5); z-index: 1; }
+        .component-icon { 
+            font-size: 3.5rem; 
+            color: var(--victorian-gold); 
+            margin-bottom: 1rem;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 20px var(--brass-gold);
+            filter: drop-shadow(0 0 10px var(--copper-orange));
+        }
+        .slider-input { 
+            width: 100%; 
+            height: 8px;
+            background: linear-gradient(135deg, var(--iron-gray), var(--machinery-steel));
+            border-radius: 5px;
+            outline: none;
+            -webkit-appearance: none;
+            margin: 15px 0;
+        }
+        
+        .slider-input::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--brass-gold), var(--copper-orange));
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid var(--victorian-gold);
+            box-shadow: 0 2px 8px rgba(184, 134, 11, 0.4);
+        }
+        
+        .slider-input::-moz-range-thumb {
+            width: 20px;
+            height: 20px;
+            background: linear-gradient(135deg, var(--brass-gold), var(--copper-orange));
+            border-radius: 50%;
+            cursor: pointer;
+            border: 2px solid var(--victorian-gold);
+            box-shadow: 0 2px 8px rgba(184, 134, 11, 0.4);
+        }
+        .value-display { 
+            font-size: 2.2rem; 
+            font-weight: 700; 
+            color: var(--copper-orange); 
+            font-family: 'Cinzel', serif; 
+            margin: 1rem 0;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 15px var(--brass-gold);
+        }
+
+        .composition-card h2 {
+            font-family: 'Cinzel', serif;
+            color: var(--steam-white);
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 10px var(--brass-gold);
+            font-weight: 700;
+        }
+        
+        /* --- BUG FIX for Overlapping Buttons --- */
+        .nav-buttons { 
+            display: flex; 
+            gap: 24px; 
+            justify-content: center; 
+            align-items: center;
+            margin-top: 2rem;
+            margin-bottom: 2rem;
+            position: relative;
+            z-index: 50;
+            width: 100%;
+            padding: 0 20px;
+        }
+        /* --- END OF FIX --- */
+
+        .nav-btn { 
+            padding: 16px 36px; 
+            border-radius: 12px; 
+            border: 2px solid; 
+            font-weight: 700; 
+            font-size: 1.1rem; 
+            transition: all 0.3s ease; 
+            cursor: pointer; 
+            font-family: 'Cinzel', serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            min-width: 140px;
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+        }
+        
+        .prev-btn { 
+            background: linear-gradient(135deg, rgba(47, 47, 47, 0.8), rgba(112, 128, 144, 0.7)); 
+            color: var(--gear-silver);
+            border-color: var(--brass-gold);
+            box-shadow: 
+                0 4px 12px rgba(184, 134, 11, 0.3),
+                inset 0 1px 0 rgba(218, 165, 32, 0.2);
+        }
+        
+        .next-btn { 
+            background: linear-gradient(135deg, var(--brass-gold), var(--copper-orange)); 
+            color: var(--coal-black);
+            border-color: var(--victorian-gold);
+            box-shadow: 
+                0 6px 15px rgba(184, 134, 11, 0.4),
+                inset 0 2px 0 rgba(218, 165, 32, 0.3);
+        }
+        
+        .prev-btn:hover {
+            background: linear-gradient(135deg, rgba(184, 134, 11, 0.3), rgba(112, 128, 144, 0.8));
+            transform: translateY(-2px);
+            box-shadow: 
+                0 6px 15px rgba(184, 134, 11, 0.4),
+                inset 0 2px 0 rgba(218, 165, 32, 0.3);
+        }
+        
+        .next-btn:hover {
+            background: linear-gradient(135deg, var(--copper-orange), var(--victorian-gold));
+            transform: translateY(-2px);
+            box-shadow: 
+                0 8px 18px rgba(184, 134, 11, 0.5),
+                inset 0 3px 0 rgba(218, 165, 32, 0.4);
+        }
+        .insights-link { 
+            color: var(--gear-silver); 
+            text-decoration: none; 
+            margin-top: 1.5rem; 
+            transition: color 0.3s;
+            font-family: 'Libre Baskerville', serif;
+        }
+        .insights-link:hover { 
+            color: var(--victorian-gold); 
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+        .total-display { 
+            margin-top: 1.5rem; 
+            font-size: 1.1rem; 
+            position: relative; 
+            z-index: 20; 
+            color: var(--steam-white);
+            font-family: 'Libre Baskerville', serif;
+        }
+        .total-display.error { 
+            color: var(--rust-red); 
+            font-weight: bold; 
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+    </style>
+</head>
+<body>
+    <nav class="top-navbar">
+        <div class="navbar-content">
+            <div class="logo"><i class="fas fa-gas-pump"></i> FuelBlend AI</div>
+            <a href="index.html" class="back-link">&larr; Back to Selection</a>
+        </div>
+    </nav>
+    <div class="main-container">
+        <div id="blend-summary" style="text-align: center; margin-bottom: 20px; padding: 15px; background: linear-gradient(135deg, rgba(184, 134, 11, 0.15), rgba(205, 127, 50, 0.1)); border-radius: 15px; border: 2px solid rgba(184, 134, 11, 0.4); box-shadow: 0 4px 12px rgba(184, 134, 11, 0.2), inset 0 1px 0 rgba(218, 165, 32, 0.2);"></div>
+        <div class="cards-container">
+            <div id="cards-wrapper" style="width:100%; height:100%; transform-style: preserve-3d;"></div>
+        </div>
+        <div class="nav-buttons">
+            <button class="nav-btn prev-btn" id="prevBtn">&larr; Prev</button>
+            <button class="nav-btn next-btn" id="nextBtn">Next &rarr;</button>
+        </div>
+        <div id="total-display" class="total-display"></div>
+    </div>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const selectedComponents = JSON.parse(localStorage.getItem('selectedComponents')) || ['1', '2'];
+            let componentCompositions = JSON.parse(localStorage.getItem('componentCompositions')) || {};
+            let currentIndex = 0;
+            let isAnimating = false; // Animation lock
+            
+            const wrapper = document.getElementById('cards-wrapper');
+            const prevBtn = document.getElementById('prevBtn');
+            const nextBtn = document.getElementById('nextBtn');
+            const totalDisplay = document.getElementById('total-display');
+
+            function createCards() {
+                wrapper.innerHTML = '';
+                
+                // Initialize compositions: selected components get equal split, others get 0
+                componentCompositions = {};
+                for (let i = 1; i <= 5; i++) {
+                    const id = i.toString();
+                    if (selectedComponents.includes(id)) {
+                        componentCompositions[id] = 1 / selectedComponents.length;
+                    } else {
+                        componentCompositions[id] = 0;
+                    }
+                }
+                const componentIcons = { '1': 'fa-oil-can', '2': 'fa-flask', '3': 'fa-atom', '4': 'fa-fire', '5': 'fa-leaf' };
+                
+                // Create cards for all 5 components, but show different UI for selected vs unselected
+                for (let i = 1; i <= 5; i++) {
+                    const id = i.toString();
+                    const card = document.createElement('div');
+                    card.className = 'composition-card hide';
+                    card.dataset.id = id;
+                    const value = componentCompositions[id] || 0;
+                    const isSelected = selectedComponents.includes(id);
+                    
+                    if (isSelected) {
+                        // Active component - can be adjusted
+                        card.innerHTML = `
+                            <div class="component-icon"><i class="fas ${componentIcons[id] || 'fa-vial'}"></i></div>
+                            <h2>Component ${id} ✓</h2>
+                            <p style="color: var(--gear-silver); font-family: 'Libre Baskerville', serif;">Adjust composition percentage</p>
+                            <input type="range" class="slider-input form-range" min="0" max="1" step="0.001" value="${value}">
+                            <div class="value-display">${(value * 100).toFixed(1)}%</div>
+                            <a href="insights.html?component=${id}&value=${value}" class="insights-link">View Raw Properties &rarr;</a>
+                        `;
+                    } else {
+                        // Inactive component - included in blend but at 0%
+                        card.innerHTML = `
+                            <div class="component-icon" style="opacity: 0.4;"><i class="fas ${componentIcons[id] || 'fa-vial'}"></i></div>
+                            <h2 style="opacity: 0.6;">Component ${id}</h2>
+                            <p style="opacity: 0.6; color: var(--gear-silver); font-family: 'Libre Baskerville', serif;">Included in blend at 0%</p>
+                            <div style="padding: 20px; background: linear-gradient(135deg, rgba(112, 128, 144, 0.2), rgba(105, 105, 105, 0.1)); border-radius: 10px; margin: 20px 0; border: 1px solid rgba(192, 192, 192, 0.3);">
+                                <i class="fas fa-circle" style="font-size: 2rem; color: var(--iron-gray); margin-bottom: 10px;"></i>
+                                <div style="font-size: 1.2rem; color: var(--iron-gray); font-family: 'Cinzel', serif;">Zero composition</div>
+                                <div style="font-size: 0.9rem; color: var(--gear-silver); margin-top: 5px; font-family: 'Libre Baskerville', serif;">Will be blended with other components</div>
+                            </div>
+                            <div class="value-display" style="opacity: 0.6;">0.0%</div>
+                        `;
+                    }
+                    wrapper.appendChild(card);
+                }
+                updateCardsUI();
+                updateTotalUI();
+            }
+
+            function updateCardsUI() {
+                isAnimating = true;
+                const cards = wrapper.querySelectorAll('.composition-card');
+                cards.forEach((card, i) => {
+                    card.className = 'composition-card';
+                    const diff = i - currentIndex;
+                    if (diff === 0) card.classList.add('active');
+                    else if (diff === -1) card.classList.add('prev');
+                    else if (diff === 1) card.classList.add('next');
+                    else card.classList.add('hide');
+                });
+                prevBtn.style.visibility = currentIndex === 0 ? 'hidden' : 'visible';
+                nextBtn.textContent = currentIndex === 4 ? 'Finish' : 'Next →'; // Always show all 5 components
+                setTimeout(() => { isAnimating = false; }, 600); // Unlock after transition
+            }
+
+            function updateTotalUI() {
+                const total = Object.values(componentCompositions).reduce((sum, val) => sum + val, 0);
+                totalDisplay.textContent = `Total Composition: ${(total * 100).toFixed(1)}%`;
+                totalDisplay.classList.toggle('error', Math.abs(total - 1.0) > 0.002);
+            }
+
+            wrapper.addEventListener('input', e => {
+                if (e.target.classList.contains('slider-input')) {
+                    const changedId = e.target.closest('.composition-card').dataset.id;
+                    const newValue = parseFloat(e.target.value);
+                    const card = e.target.closest('.composition-card');
+                    card.querySelector('.value-display').textContent = `${(newValue * 100).toFixed(1)}%`;
+                    
+                    // Update the changed component
+                    componentCompositions[changedId] = newValue;
+                    
+                    // Only adjust other SELECTED components (keep unselected at 0)
+                    const otherSelectedIds = selectedComponents.filter(id => id !== changedId);
+                    
+                    if (otherSelectedIds.length > 0) {
+                        let otherSum = 0;
+                        otherSelectedIds.forEach(id => otherSum += componentCompositions[id]);
+                        
+                        if (otherSum > 0) {
+                            const availableToDistribute = 1.0 - newValue;
+                            otherSelectedIds.forEach(id => {
+                                const newOtherValue = (componentCompositions[id] / otherSum) * availableToDistribute;
+                                componentCompositions[id] = Math.max(0, newOtherValue);
+                            });
+                        } else {
+                            // If other components are 0, distribute remaining equally
+                            const remainingValue = 1.0 - newValue;
+                            const valuePerOther = remainingValue / otherSelectedIds.length;
+                            otherSelectedIds.forEach(id => {
+                                componentCompositions[id] = valuePerOther;
+                            });
+                        }
+                    }
+                    
+                    // Ensure unselected components stay at 0
+                    for (let i = 1; i <= 5; i++) {
+                        const id = i.toString();
+                        if (!selectedComponents.includes(id)) {
+                            componentCompositions[id] = 0;
+                        }
+                    }
+                    
+                    // Normalize only selected components to sum to 1
+                    const selectedTotal = selectedComponents.reduce((sum, id) => sum + componentCompositions[id], 0);
+                    if (selectedTotal > 0) {
+                        selectedComponents.forEach(id => {
+                            componentCompositions[id] /= selectedTotal;
+                        });
+                    }
+                    
+                    // Update all cards
+                    for (let i = 1; i <= 5; i++) {
+                        const id = i.toString();
+                        const otherCard = wrapper.querySelector(`.composition-card[data-id="${id}"]`);
+                        if (otherCard) {
+                            const value = componentCompositions[id];
+                            const slider = otherCard.querySelector('.slider-input');
+                            const display = otherCard.querySelector('.value-display');
+                            const link = otherCard.querySelector('.insights-link');
+                            
+                            if (slider) slider.value = value;
+                            if (display) display.textContent = `${(value * 100).toFixed(1)}%`;
+                            if (link) link.href = `insights.html?component=${id}&value=${value}`;
+                        }
+                    }
+                    
+                    updateTotalUI();
+                }
+            });
+
+            prevBtn.addEventListener('click', () => {
+                if (isAnimating || currentIndex <= 0) return;
+                currentIndex--;
+                updateCardsUI();
+            });
+
+            nextBtn.addEventListener('click', () => {
+                if (isAnimating) return;
+                if (currentIndex < 4) { // Show all 5 components (0-4 index)
+                    currentIndex++;
+                    updateCardsUI();
+                } else {
+                    // Check that selected components sum to 100%
+                    const selectedTotal = selectedComponents.reduce((sum, id) => sum + componentCompositions[id], 0);
+                    if (Math.abs(selectedTotal - 1.0) > 0.002) {
+                        alert('Selected components must sum to exactly 100%.');
+                        return;
+                    }
+                    localStorage.setItem('componentCompositions', JSON.stringify(componentCompositions));
+                    window.location.href = 'results.html';
+                }
+            });
+
+            // --- SMOOTHER NAVIGATION ---
+            // 1. Keyboard Navigation
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'ArrowLeft') {
+                    prevBtn.click();
+                } else if (e.key === 'ArrowRight') {
+                    nextBtn.click();
+                }
+            });
+
+            // 2. Touch/Swipe Navigation
+            let touchStartX = 0;
+            let touchEndX = 0;
+            const swipeThreshold = 50; // Minimum distance for a swipe
+
+            wrapper.addEventListener('touchstart', (e) => {
+                touchStartX = e.changedTouches[0].screenX;
+            }, { passive: true });
+
+            wrapper.addEventListener('touchend', (e) => {
+                touchEndX = e.changedTouches[0].screenX;
+                handleSwipe();
+            }, { passive: true });
+
+            function handleSwipe() {
+                if (isAnimating) return; // Prevent swipe during animation
+                if (touchEndX < touchStartX - swipeThreshold) {
+                    nextBtn.click(); // Swiped left
+                }
+                if (touchEndX > touchStartX + swipeThreshold) {
+                    prevBtn.click(); // Swiped right
+                }
+            }
+            // --- END OF SMOOTHER NAVIGATION ---
+            
+            function updateBlendSummary() {
+                const summaryDiv = document.getElementById('blend-summary');
+                const selectedCount = selectedComponents.length;
+                const unselectedCount = 5 - selectedCount;
+                const selectedList = selectedComponents.map(id => `Component ${id}`).join(', ');
+                const unselectedComponents = [];
+                for (let i = 1; i <= 5; i++) {
+                    if (!selectedComponents.includes(i.toString())) {
+                        unselectedComponents.push(`Component ${i}`);
+                    }
+                }
+                const unselectedList = unselectedComponents.join(', ');
+                
+                summaryDiv.innerHTML = `
+                    <div style="font-size: 1.1rem; font-weight: 700; color: var(--victorian-gold); margin-bottom: 5px; font-family: 'Cinzel', serif;">
+                        <i class="fas fa-flask"></i> 5-Component Industrial Blend
+                    </div>
+                    <div style="font-size: 0.9rem; font-family: 'Libre Baskerville', serif;">
+                        <strong>Variable:</strong> ${selectedList} (adjustable %)<br>
+                        <strong>Fixed at 0%:</strong> ${unselectedList || 'None'} (included in blend)
+                    </div>
+                `;
+            }
+            
+            createCards();
+            updateBlendSummary();
+        });
+    </script>
+</body>
+</html>
+
