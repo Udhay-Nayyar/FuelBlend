@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Component Insights - Fuel Predictor</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=Libre+Baskerville:ital,wght@0,400;0,700;1,400&display=swap"
+        rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            /* Industrial Revolution 4.0 Theme Colors */
+            --steel-gray: #4a4a4a;
+            --copper-orange: #b87333;
+            --brass-gold: #b5a642;
+            --steam-white: #f5f5f5;
+            --iron-black: #2b2b2b;
+            --rust-red: #8b3103;
+            --metallic-silver: #c0c0c0;
+            --coal-black: #1a1a1a;
+            --bronze-accent: #cd7f32;
+            --gear-silver: #a8a8a8;
+            --industrial-brown: #5c4033;
+            --rivet-gray: #707070;
+            --pressure-red: #cc2200;
+            --gauge-yellow: #ffd700;
+        }
+
+        body {
+            font-family: 'Libre Baskerville', serif;
+            background:
+                linear-gradient(180deg, var(--coal-black) 0%, var(--steel-gray) 50%, var(--metallic-silver) 100%),
+                linear-gradient(90deg, rgba(184, 115, 51, 0.1) 0%, rgba(181, 166, 66, 0.1) 100%);
+            color: var(--steam-white);
+            min-height: 100vh;
+            overflow-x: hidden;
+            padding: 10px;
+            position: relative;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        @media (min-width: 768px) {
+            body {
+                padding: 20px;
+            }
+        }
+
+        /* Industrial Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 5px 5px,
+                    var(--rivet-gray) 2px,
+                    transparent 2px),
+                linear-gradient(45deg,
+                    transparent 0%,
+                    var(--bronze-accent) 1px,
+                    transparent 1px);
+            background-size: 30px 30px, 10px 10px;
+            opacity: 0.1;
+            z-index: -2;
+            animation: mechanicalShift 10s linear infinite;
+        }
+
+        /* Industrial Overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 50% 120%, var(--pressure-red) 0%, transparent 60%),
+                repeating-linear-gradient(45deg,
+                    transparent 0,
+                    transparent 10px,
+                    rgba(92, 64, 51, 0.1) 10px,
+                    rgba(92, 64, 51, 0.1) 11px);
+            z-index: -1;
+            opacity: 0.3;
+            animation: steamPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes mechanicalShift {
+            0% {
+                transform: translateX(0) translateY(0);
+            }
+            25% {
+                transform: translateX(2px) translateY(1px);
+            }
+            50% {
+                transform: translateX(0) translateY(2px);
+            }
+            75% {
+                transform: translateX(-2px) translateY(1px);
+            }
+            100% {
+                transform: translateX(0) translateY(0);
+            }
+        }
+
+        @keyframes rotateAndScale {
+            0% {
+                transform: rotate(0deg) scale(1);
+            }
+            100% {
+                transform: rotate(360deg) scale(1.03);
+            }
+        }
+
+        .insights-container {
+            display: flex;
+            flex-direction: column;
+            min-height: calc(100vh - 80px);
+            gap: 20px;
+            position: relative;
+            margin-top: 60px;
+        }
+
+        @media (min-width: 1024px) {
+            .insights-container {
+                flex-direction: row;
+                height: calc(100vh - 40px);
+                gap: 30px;
+                margin-top: 0;
+            }
+        }
+
+        .component-card-container {
+            flex: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            order: 1;
+        }
+
+        @media (min-width: 1024px) {
+            .component-card-container {
+                flex: 0 0 400px;
+                order: 2;
+            }
+        }
+
+        .component-card {
+            width: 100%;
+            max-width: 350px;
+            height: auto;
+            min-height: 300px;
+            background: 
+                linear-gradient(135deg, rgba(47, 47, 47, 0.9), rgba(139, 69, 19, 0.8)),
+                radial-gradient(circle at center, rgba(184, 134, 11, 0.1), transparent);
+            border-radius: 15px;
+            padding: 1.5rem;
+            backdrop-filter: blur(15px);
+            border: 3px solid #b8860b;
+            box-shadow: 
+                0 20px 50px rgba(184, 134, 11, 0.4),
+                inset 0 3px 0 rgba(218, 165, 32, 0.3),
+                inset 0 -3px 0 rgba(139, 69, 19, 0.5);
+            text-align: center;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            animation: slideInFromTop 1s ease-out;
+        }
+
+        @media (min-width: 768px) {
+            .component-card {
+                padding: 2rem;
+                min-height: 350px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .component-card {
+                width: 350px;
+                height: 450px;
+                animation: slideInFromRight 1s ease-out;
+            }
+        }
+
+        .properties-panel {
+            flex: 1;
+            background: 
+                linear-gradient(135deg, rgba(47, 47, 47, 0.95), rgba(112, 128, 144, 0.9)),
+                radial-gradient(circle at center, rgba(184, 134, 11, 0.1), transparent);
+            border-radius: 15px;
+            padding: 1.5rem;
+            backdrop-filter: blur(15px);
+            border: 3px solid #b8860b;
+            box-shadow: 
+                0 20px 50px rgba(184, 134, 11, 0.4),
+                inset 0 3px 0 rgba(218, 165, 32, 0.2);
+            animation: slideInFromBottom 1s ease-out;
+            overflow-y: auto;
+            order: 2;
+        }
+
+        @media (min-width: 768px) {
+            .properties-panel {
+                padding: 2rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .properties-panel {
+                animation: slideInFromLeft 1s ease-out;
+                order: 1;
+            }
+        }
+
+        @keyframes slideInFromRight {
+            0% {
+                transform: translateX(100%) scale(0.8);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInFromLeft {
+            0% {
+                transform: translateX(-100%) scale(0.8);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateX(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInFromTop {
+            0% {
+                transform: translateY(-100%) scale(0.8);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes slideInFromBottom {
+            0% {
+                transform: translateY(100%) scale(0.8);
+                opacity: 0;
+            }
+
+            100% {
+                transform: translateY(0) scale(1);
+                opacity: 1;
+            }
+        }
+
+        .component-icon {
+            font-size: 3rem;
+            color: #daa520;
+            margin-bottom: 1rem;
+            text-shadow: 
+                3px 3px 6px rgba(0, 0, 0, 0.8),
+                0 0 20px #b8860b;
+            filter: drop-shadow(0 0 15px #cd7f32);
+            animation: brassGlow 4s infinite;
+        }
+
+        @media (min-width: 768px) {
+            .component-icon {
+                font-size: 4rem;
+                margin-bottom: 1.2rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .component-icon {
+                font-size: 4.5rem;
+                margin-bottom: 1.5rem;
+            }
+        }
+
+        @keyframes brassGlow {
+            0% {
+                transform: scale(1);
+                text-shadow: 
+                    3px 3px 6px rgba(0, 0, 0, 0.8),
+                    0 0 20px #b8860b;
+                filter: drop-shadow(0 0 15px #cd7f32);
+            }
+
+            50% {
+                transform: scale(1.08);
+                text-shadow: 
+                    3px 3px 8px rgba(0, 0, 0, 0.8),
+                    0 0 30px #b8860b,
+                    0 0 40px #cd7f32;
+                filter: drop-shadow(0 0 25px #cd7f32);
+            }
+
+            100% {
+                transform: scale(1);
+                text-shadow: 
+                    3px 3px 6px rgba(0, 0, 0, 0.8),
+                    0 0 20px #b8860b;
+                filter: drop-shadow(0 0 15px #cd7f32);
+            }
+        }
+
+        .component-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            color: #f5f5dc;
+            font-family: 'Cinzel', serif;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.8);
+        }
+
+        @media (min-width: 768px) {
+            .component-title {
+                font-size: 1.6rem;
+                margin-bottom: 1rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .component-title {
+                font-size: 1.8rem;
+            }
+        }
+
+        .component-value {
+            font-size: 2.4rem;
+            font-weight: 700;
+            color: #cd7f32;
+            margin: 0.8rem 0;
+            text-shadow: 
+                3px 3px 6px rgba(0, 0, 0, 0.8),
+                0 0 20px #b8860b;
+            font-family: 'Cinzel', serif;
+        }
+
+        @media (min-width: 768px) {
+            .component-value {
+                font-size: 2.8rem;
+                margin: 1rem 0;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .component-value {
+                font-size: 3.2rem;
+            }
+        }
+
+        .properties-title {
+            font-size: 1.4rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            color: #daa520;
+            text-align: center;
+            border-bottom: 3px solid rgba(184, 134, 11, 0.4);
+            padding-bottom: 0.8rem;
+            font-family: 'Cinzel', serif;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 15px #b8860b;
+        }
+
+        @media (min-width: 768px) {
+            .properties-title {
+                font-size: 1.8rem;
+                margin-bottom: 1.8rem;
+                padding-bottom: 1rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .properties-title {
+                font-size: 2.2rem;
+                margin-bottom: 2rem;
+            }
+        }
+
+        .property-item {
+            background: rgba(255, 255, 255, 0.05);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            border-left: 4px solid #1abc9c;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+        }
+
+        .property-item:hover {
+            background: rgba(255, 255, 255, 0.1);
+            transform: translateX(10px);
+        }
+
+        .property-item {
+            background: 
+                linear-gradient(135deg, rgba(184, 134, 11, 0.15), rgba(205, 127, 50, 0.1)),
+                rgba(47, 47, 47, 0.3);
+            border-radius: 10px;
+            padding: 1rem;
+            margin-bottom: 0.8rem;
+            border-left: 4px solid #daa520;
+            border: 2px solid rgba(184, 134, 11, 0.4);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.6s ease-out;
+            animation-fill-mode: both;
+            box-shadow: 
+                0 4px 12px rgba(184, 134, 11, 0.2),
+                inset 0 1px 0 rgba(218, 165, 32, 0.2);
+        }
+
+        @media (min-width: 768px) {
+            .property-item {
+                border-radius: 12px;
+                padding: 1.2rem;
+                margin-bottom: 1rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .property-item {
+                padding: 1.5rem;
+            }
+        }
+
+        .property-item:hover {
+            background: 
+                linear-gradient(135deg, rgba(184, 134, 11, 0.25), rgba(205, 127, 50, 0.2)),
+                rgba(47, 47, 47, 0.4);
+            transform: translateX(8px);
+            border-color: #cd7f32;
+            box-shadow: 
+                0 8px 20px rgba(184, 134, 11, 0.4),
+                inset 0 2px 0 rgba(218, 165, 32, 0.3);
+        }
+
+        @media (min-width: 1024px) {
+            .property-item:hover {
+                transform: translateX(12px);
+            }
+        }
+
+        /* Touch-friendly styles for mobile */
+        @media (max-width: 767px) {
+            .property-item {
+                min-height: 60px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+            }
+            
+            .property-item:active {
+                background: 
+                    linear-gradient(135deg, rgba(184, 134, 11, 0.25), rgba(205, 127, 50, 0.2)),
+                    rgba(47, 47, 47, 0.4);
+                transform: scale(0.98);
+            }
+        }
+
+        .property-name {
+            font-size: 0.9rem;
+            font-weight: 700;
+            color: #f5f5dc;
+            margin-bottom: 0.4rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-family: 'Cinzel', serif;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        @media (min-width: 768px) {
+            .property-name {
+                font-size: 1rem;
+                margin-bottom: 0.5rem;
+                gap: 10px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .property-name {
+                font-size: 1.1rem;
+            }
+        }
+
+        .property-value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: #cd7f32;
+            font-family: 'Cinzel', serif;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 10px #b8860b;
+        }
+
+        @media (min-width: 768px) {
+            .property-value {
+                font-size: 1.4rem;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .property-value {
+                font-size: 1.6rem;
+            }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .back-btn {
+            position: fixed;
+            top: 15px;
+            left: 15px;
+            background: linear-gradient(135deg, #b8860b, #8b4513);
+            color: #f5f5dc;
+            border: 2px solid #daa520;
+            border-radius: 25px;
+            padding: 10px 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 
+                0 6px 18px rgba(184, 134, 11, 0.4),
+                inset 0 2px 0 rgba(218, 165, 32, 0.3);
+            z-index: 1000;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            font-family: 'Cinzel', serif;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.8);
+        }
+
+        @media (min-width: 768px) {
+            .back-btn {
+                top: 20px;
+                left: 20px;
+                border-radius: 30px;
+                padding: 12px 24px;
+                font-size: 0.9rem;
+                gap: 7px;
+            }
+        }
+
+        @media (min-width: 1024px) {
+            .back-btn {
+                top: 30px;
+                left: 30px;
+                border-radius: 40px;
+                padding: 14px 28px;
+                font-size: 1rem;
+                gap: 8px;
+            }
+        }
+
+        .back-btn:hover {
+            background: linear-gradient(135deg, #daa520, #cd7f32);
+            transform: translateY(-2px);
+            box-shadow: 
+                0 8px 22px rgba(184, 134, 11, 0.6),
+                inset 0 3px 0 rgba(218, 165, 32, 0.4);
+        }
+
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(192, 192, 192, .3);
+            border-radius: 50%;
+            border-top-color: var(--brass-gold);
+            animation: spin 1s ease-in-out infinite;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* Mobile scroll indicator */
+        .scroll-indicator {
+            display: block;
+            text-align: center;
+            padding: 10px;
+            color: rgba(255, 255, 255, 0.6);
+            font-size: 0.8rem;
+            border-top: 1px solid rgba(184, 134, 11, 0.3);
+            margin-top: 10px;
+        }
+
+        @media (min-width: 1024px) {
+            .scroll-indicator {
+                display: none;
+            }
+        }
+
+        /* Improved mobile scrolling */
+        @media (max-width: 1023px) {
+            .properties-panel {
+                max-height: 60vh;
+                -webkit-overflow-scrolling: touch;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <button class="back-btn" onclick="goBack()">
+        <i class="fas fa-arrow-left"></i>
+        Back to Composition
+    </button>
+
+    <div class="insights-container">
+        <!-- Component Card (Right Side) -->
+        <div class="component-card-container">
+            <div class="component-card">
+                <div class="component-icon">
+                    <i id="componentIcon" class="fas fa-vial"></i>
+                </div>
+
+                <h2 class="component-title" id="componentTitle">Component A</h2>
+
+                <div class="component-value" id="componentValue">0.20</div>
+
+                <div style="color: rgba(255,255,255,0.7); font-size: 1rem;">
+                    Current Composition
+                </div>
+
+                <div style="margin-top: 2rem; padding: 1rem; background: rgba(255,255,255,0.05); border-radius: 10px;">
+                    <div style="font-size: 0.9rem; color: rgba(255,255,255,0.8);">
+                        <i class="fas fa-info-circle"></i>
+                        <span id="componentStatus">Moderate concentration</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Properties Panel (Left Side) -->
+        <div class="properties-panel">
+            <h2 class="properties-title">
+                <i class="fas fa-chart-bar"></i>
+                <span id="propertiesTitle">Component Properties Analysis</span>
+            </h2>
+            <div id="propertiesList">
+                <!-- Properties will be dynamically loaded here -->
+            </div>
+            <div class="scroll-indicator">
+                <i class="fas fa-chevron-down"></i>
+                Scroll to see all properties
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const urlParams = new URLSearchParams(window.location.search);
+        const component = urlParams.get('component') || '1';
+        const value = parseFloat(urlParams.get('value')) || 0.2;
+
+        const componentIcons = {
+            '1': 'fas fa-oil-can',
+            '2': 'fas fa-flask',
+            '3': 'fas fa-atom',
+            '4': 'fas fa-fire',
+            '5': 'fas fa-leaf'
+        };
+
+        function initializePage() {
+            document.getElementById('componentIcon').className = componentIcons[component] || 'fas fa-vial';
+            document.getElementById('componentTitle').textContent = `Component ${component}`;
+            document.getElementById('componentValue').textContent = `${(value * 100).toFixed(1)}%`;
+
+            const statusElement = document.getElementById('componentStatus');
+            if (value < 0.1) statusElement.textContent = 'Low concentration';
+            else if (value < 0.3) statusElement.textContent = 'Moderate concentration';
+            else if (value < 0.6) statusElement.textContent = 'High concentration';
+            else statusElement.textContent = 'Very high concentration';
+
+            // Update title to show composition-dependent analysis
+            document.getElementById('propertiesTitle').textContent =
+                `Properties at ${(value * 100).toFixed(1)}% Composition`;
+
+            loadProperties();
+        }
+
+        async function loadProperties() {
+            const propertiesList = document.getElementById('propertiesList');
+            propertiesList.innerHTML = '<div class="text-center"><div class="loading-spinner"></div><p>Loading properties...</p></div>';
+
+            try {
+                // Use properties endpoint
+                const url = `/properties?component=${component}&composition=${value}`;
+
+                const response = await fetch(url);
+
+                if (!response.ok) {
+                    const errorText = await response.text();
+                    throw new Error(`API error ${response.status}: ${errorText}`);
+                }
+
+                const data = await response.json();
+
+                propertiesList.innerHTML = '';
+
+                Object.keys(data).forEach((key, index) => {
+                    if (key !== 'error') {
+                        const propertyItem = document.createElement('div');
+                        propertyItem.className = 'property-item';
+                        propertyItem.innerHTML = `
+                            <div class="property-name">
+                                <i class="fas fa-cog"></i> ${key}
+                            </div>
+                            <div class="property-value">${parseFloat(data[key]).toFixed(6)}</div>
+                        `;
+                        propertiesList.appendChild(propertyItem);
+                    }
+                });
+
+                // Hide scroll indicator if content fits in viewport
+                const scrollIndicator = document.querySelector('.scroll-indicator');
+                const propertiesPanel = document.querySelector('.properties-panel');
+                if (propertiesPanel.scrollHeight <= propertiesPanel.clientHeight) {
+                    scrollIndicator.style.display = 'none';
+                }
+
+            } catch (error) {
+                console.error('Error:', error);
+                propertiesList.innerHTML = `<div style="color: red;">ERROR: ${error.message}</div>`;
+            }
+        }
+
+        function goBack() {
+            window.history.back();
+        }
+
+        document.addEventListener('DOMContentLoaded', initializePage);
+    </script>
+</body>
+
+</html>

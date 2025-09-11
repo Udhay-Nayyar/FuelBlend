@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Prediction Results</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700;900&family=        @keyframes mechanicalShift {
+            0% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(2px) translateY(1px); }
+            50% { transform: translateX(0) translateY(2px); }
+            75% { transform: translateX(-2px) translateY(1px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+
+        @keyframes steamPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.05); }
+        }
+
+        @keyframes fadeInUp {
+            0% {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }Baskerville:ital,wght@0,400;0,700;1,400&display=swap" rel="stylesheet" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        :root {
+            /* Industrial Revolution 4.0 Theme Colors */
+            --steel-gray: #4a4a4a;
+            --copper-orange: #b87333;
+            --brass-gold: #b5a642;
+            --steam-white: #f5f5f5;
+            --iron-black: #2b2b2b;
+            --rust-red: #8b3103;
+            --metallic-silver: #c0c0c0;
+            --coal-black: #1a1a1a;
+            --bronze-accent: #cd7f32;
+            --gear-silver: #a8a8a8;
+            --industrial-brown: #5c4033;
+            --rivet-gray: #707070;
+            --pressure-red: #cc2200;
+            --gauge-yellow: #ffd700;
+        }
+        
+        body {
+            font-family: 'Libre Baskerville', serif;
+            background:
+                linear-gradient(180deg, var(--coal-black) 0%, var(--steel-gray) 50%, var(--metallic-silver) 100%),
+                linear-gradient(90deg, rgba(184, 115, 51, 0.1) 0%, rgba(181, 166, 66, 0.1) 100%);
+            color: var(--steam-white);
+            min-height: 100vh;
+            padding: 20px;
+            position: relative;
+            text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.5);
+        }
+
+        /* Industrial Pattern */
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image:
+                radial-gradient(circle at 5px 5px,
+                    var(--rivet-gray) 2px,
+                    transparent 2px),
+                linear-gradient(45deg,
+                    transparent 0%,
+                    var(--bronze-accent) 1px,
+                    transparent 1px);
+            background-size: 30px 30px, 10px 10px;
+            opacity: 0.1;
+            z-index: -2;
+            animation: mechanicalShift 10s linear infinite;
+        }
+
+        /* Industrial Overlay */
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 50% 120%, var(--pressure-red) 0%, transparent 60%),
+                repeating-linear-gradient(45deg,
+                    transparent 0,
+                    transparent 10px,
+                    rgba(92, 64, 51, 0.1) 10px,
+                    rgba(92, 64, 51, 0.1) 11px);
+            z-index: -1;
+            opacity: 0.3;
+            animation: steamPulse 15s ease-in-out infinite;
+        }
+
+        @keyframes mechanicalShift {
+            0% { transform: translateX(0) translateY(0); }
+            25% { transform: translateX(2px) translateY(1px); }
+            50% { transform: translateX(0) translateY(2px); }
+            75% { transform: translateX(-2px) translateY(1px); }
+            100% { transform: translateX(0) translateY(0); }
+        }
+
+        @keyframes steamPulse {
+            0%, 100% { opacity: 0.3; transform: scale(1); }
+            50% { opacity: 0.4; transform: scale(1.05); }
+        }
+
+        .results-container { max-width: 1200px; margin: 0 auto; }
+        .header-section { text-align: center; margin-bottom: 2rem; }
+        .main-title { 
+            font-family: 'Libre Baskerville', serif;
+            font-size: 3.2rem; 
+            font-weight: 700; 
+            background: linear-gradient(135deg, 
+                var(--brass-gold) 0%, 
+                var(--copper-orange) 30%, 
+                var(--bronze-accent) 70%, 
+                var(--steam-white) 100%);
+            background-size: 300% 300%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            animation: mechanicalShift 10s ease-in-out infinite;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.6);
+            position: relative;
+        }
+
+        .composition-summary { 
+            background:
+                linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(42, 42, 42, 0.9)),
+                repeating-linear-gradient(45deg, 
+                    transparent, 
+                    transparent 2px, 
+                    rgba(205, 127, 50, 0.1) 2px, 
+                    rgba(205, 127, 50, 0.1) 4px);
+            backdrop-filter: blur(10px);
+            border-radius: 8px;
+            padding: 1.5rem;
+            margin-bottom: 2rem;
+            border: 2px solid var(--copper-orange);
+            box-shadow:
+                0 8px 16px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(192, 192, 192, 0.1);
+        }
+        .component-chip { 
+            display: inline-block; 
+            background: linear-gradient(135deg, var(--bronze-accent), var(--copper-orange));
+            color: var(--steam-white);
+            padding: 0.6rem 1.2rem;
+            border-radius: 4px;
+            margin: 0.25rem;
+            font-weight: 600;
+            border: 2px solid var(--brass-gold);
+            box-shadow:
+                0 4px 8px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(192, 192, 192, 0.1);
+            font-family: 'Libre Baskerville', serif;
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+        }
+        .property-grid { 
+            display: grid; 
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); 
+            gap: 1.5rem; 
+        }
+        
+        .property-item { 
+            background:
+                linear-gradient(135deg, rgba(26, 26, 26, 0.95), rgba(42, 42, 42, 0.9)),
+                repeating-linear-gradient(45deg, 
+                    transparent, 
+                    transparent 2px, 
+                    rgba(205, 127, 50, 0.1) 2px, 
+                    rgba(205, 127, 50, 0.1) 4px);
+            border-radius: 8px;
+            padding: 1.5rem;
+            border: 2px solid var(--copper-orange);
+            box-shadow:
+                0 8px 16px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(192, 192, 192, 0.1);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease-out forwards;
+            opacity: 0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .property-item::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                repeating-linear-gradient(45deg,
+                    transparent 0,
+                    transparent 10px,
+                    rgba(92, 64, 51, 0.1) 10px,
+                    rgba(92, 64, 51, 0.1) 11px);
+            z-index: -1;
+            opacity: 0.1;
+            transition: opacity 0.3s;
+        }
+
+        .property-item:hover::before {
+            opacity: 0.2;
+        }
+
+        .property-item:hover {
+            transform: translateY(-5px);
+            box-shadow:
+                0 12px 24px rgba(0, 0, 0, 0.4),
+                inset 0 1px 0 rgba(192, 192, 192, 0.2);
+            border-color: var(--brass-gold);
+        }
+
+        @keyframes brassGlow {
+            0%, 100% { background-position: 0% 50%; }
+            25% { background-position: 50% 0%; }
+            50% { background-position: 100% 50%; }
+            75% { background-position: 50% 100%; }
+        }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        .property-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 0.5rem; }
+        .property-name { 
+            font-family: 'Cinzel', serif;
+            font-size: 1.1rem; 
+            font-weight: 700;
+            color: var(--victorian-gold);
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 10px var(--brass-gold);
+        }
+        .property-model { 
+            font-size: 0.85rem; 
+            background: rgba(47, 47, 47, 0.8); 
+            padding: 5px 12px; 
+            border-radius: 6px;
+            border: 1px solid var(--brass-gold);
+            color: var(--gear-silver);
+            font-family: 'Libre Baskerville', serif;
+            box-shadow: inset 0 1px 0 rgba(218, 165, 32, 0.2);
+        }
+        .property-value { 
+            font-size: 2.2rem; 
+            font-weight: 700; 
+            color: var(--copper-orange); 
+            font-family: 'Cinzel', serif;
+            text-shadow: 
+                2px 2px 4px rgba(0, 0, 0, 0.8),
+                0 0 15px var(--brass-gold);
+        }
+        .property-score { 
+            font-size: 0.9rem; 
+            color: var(--gear-silver); 
+            margin-top: 0.5rem; 
+            font-family: 'Libre Baskerville', serif;
+        }
+        .loading-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.8); display: flex; flex-direction: column; align-items: center; justify-content: center; z-index: 1000; }
+        .spinner { 
+            border: 8px solid rgba(192, 192, 192, 0.2); 
+            border-left-color: var(--brass-gold); 
+            border-radius: 50%; 
+            width: 80px; 
+            height: 80px; 
+            animation: spin 1s linear infinite; 
+        }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .action-buttons { text-align: center; margin-top: 3rem; }
+        .action-btn { 
+            background: linear-gradient(135deg, var(--brass-gold), var(--copper-orange)); 
+            color: var(--coal-black); 
+            border: 3px solid var(--victorian-gold); 
+            border-radius: 40px; 
+            padding: 14px 28px; 
+            font-size: 1rem; 
+            font-weight: 700; 
+            cursor: pointer; 
+            transition: all 0.3s ease; 
+            text-decoration: none;
+            font-family: 'Cinzel', serif;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            box-shadow: 
+                0 6px 20px rgba(184, 134, 11, 0.4),
+                inset 0 2px 0 rgba(218, 165, 32, 0.3);
+            text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.3);
+        }
+        .action-btn:hover { 
+            transform: translateY(-3px) scale(1.05); 
+            box-shadow: 
+                0 8px 25px rgba(184, 134, 11, 0.6),
+                inset 0 3px 0 rgba(218, 165, 32, 0.4),
+                0 0 30px rgba(205, 127, 50, 0.4); 
+        }
+    </style>
+</head>
+<body>
+    <div id="loader" class="loading-overlay">
+        <div class="spinner"></div>
+        <h3 style="margin-top: 1rem;">Running ML Predictions...</h3>
+    </div>
+    
+    <div class="results-container" style="display: none;">
+        <div class="header-section">
+            <h1 class="main-title"><i class="fas fa-chart-line"></i> Prediction Results</h1>
+        </div>
+        <div class="composition-summary">
+            <h3 style="color: var(--victorian-gold); margin-bottom: 1rem; font-family: 'Cinzel', serif; font-weight: 700;"><i class="fas fa-flask"></i> Industrial Blend Composition</h3>
+            <div id="componentSummary"></div>
+        </div>
+        <div class="property-grid" id="predictionsGrid"></div>
+        <div class="action-buttons">
+            <a href="index.html?completed=true" class="action-btn">
+                <i class="fas fa-redo-alt"></i> Start a New Blend
+            </a>
+        </div>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', async function () {
+            const componentCompositions = JSON.parse(localStorage.getItem('componentCompositions')) || {};
+            const loader = document.getElementById('loader');
+            const resultsContainer = document.querySelector('.results-container');
+            const summaryDiv = document.getElementById('componentSummary');
+            const predictionsGrid = document.getElementById('predictionsGrid');
+
+            if (Object.keys(componentCompositions).length === 0) {
+                summaryDiv.innerHTML = '<p>No composition data found.</p>';
+                loader.style.display = 'none';
+                resultsContainer.style.display = 'block';
+                return;
+            }
+
+            // Display a summary of the user's choices
+            Object.keys(componentCompositions).forEach(c => {
+                const chip = document.createElement('span');
+                chip.className = 'component-chip';
+                chip.innerHTML = `Component ${c}: <strong>${(componentCompositions[c] * 100).toFixed(1)}%</strong>`;
+                summaryDiv.appendChild(chip);
+            });
+
+            try {
+                // Call the backend API for predictions
+              // Use full backend URL for live deployment
+              // Determine backend URL dynamically
+              let backendUrl = window.location.origin;
+              // If running on file protocol or unknown origin, fallback to localhost
+              if (window.location.protocol === 'file:' || backendUrl === 'null' || backendUrl === '') {
+                  backendUrl = 'http://localhost:5000';
+              }
+              // If running locally on localhost or 127.0.0.1, ensure port 8080 is used
+              if (backendUrl.includes('localhost') || backendUrl.includes('127.0.0.1')) {
+                  if (!backendUrl.includes(':8080')) {
+                      backendUrl = 'http://localhost:8080';
+                  }
+              }
+              const response = await fetch(`${backendUrl}/predict`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify({ compositions: componentCompositions })
+});
+
+                if (!response.ok) throw new Error('API call failed');
+                const predictions = await response.json();
+
+                // Display the new, detailed prediction cards
+                Object.keys(predictions).forEach((key, index) => {
+                    const data = predictions[key];
+                    const item = document.createElement('div');
+                    item.className = 'property-item';
+                    item.style.animationDelay = `${index * 0.1}s`;
+                    item.innerHTML = `
+                        <div class="property-header">
+                            <span class="property-name">${key.replace('Blend', '')}</span>
+                            <span class="property-model">${data.model}</span>
+                        </div>
+                        <div class="property-value">${data.prediction.toFixed(4)}</div>
+                        <div class="property-score">
+                            Accuracy (R² Score): <strong>${data.r2_score.toFixed(4)}</strong>
+                        </div>
+                    `;
+                    predictionsGrid.appendChild(item);
+                });
+
+            } catch (error) {
+                console.error('Error calling prediction API:', error);
+                predictionsGrid.innerHTML = `<p style="color:red; text-align:center;"><strong>Connection Error:</strong> Could not get predictions. Please ensure the Python backend server is running.</p>`;
+            } finally {
+                loader.style.display = 'none';
+                resultsContainer.style.display = 'block';
+            }
+        });
+    </script>
+</body>
+</html>
+
